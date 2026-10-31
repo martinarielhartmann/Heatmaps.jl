@@ -1,7 +1,23 @@
+""""
+Heatmap for symmetric DataFrame such as a correlation matrix. If `get_cor` is set to `true`, a correlation matrix and p-values are computed from the DataFrame.
 """
+function heatmap(df::DataFrame;label="",get_cor=false)
+    if get_cor
+        vnames = names(df)
+        x = Matrix(df)
+        p = size(x,2)
+        df_cor = DataFrame(cor(x),vnames)
+        p = [pvalue(CorrelationTest(x[:, i], x[:, j])) for i in 1:p, j in 1:p]
+        Heatmaps.heatmap(df_cor,p;label=label)
+    else
+        heatmap_(df::DataFrame;label="")
+    end
+end
+
+""""
 Heatmap for symmetric DataFrame such as a correlation matrix.
 """
-function heatmap(df::DataFrame;label="")
+function heatmap_(df::DataFrame;label="")
     s = size(df)
     s[1] !== s[2] ? error("Expected to see symmetric data") : Nothing
     l = s[1]
@@ -26,6 +42,7 @@ end
 """
 Heatmap for symmetric DataFrame (such as a correlation matrix) and an array of p-values.
 """
+
 function heatmap(df::DataFrame,m::Matrix{Float64};label="")
     s = size(df)
     s2 = size(m)

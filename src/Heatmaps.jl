@@ -1,5 +1,5 @@
 module Heatmaps
-using Makie,CairoMakie,DataFrames,LinearAlgebra
+using Makie,CairoMakie,DataFrames,LinearAlgebra,Statistics,HypothesisTests
 import Base: *
 
 export heatmap
