@@ -87,4 +87,4 @@ function p_to_stars(p)
         return ""
     end
 end
-fontsize(n) = round(150/(n^0.5))
+fontsize(n) = round(125/(n^0.4))
