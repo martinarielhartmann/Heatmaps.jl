@@ -25,13 +25,15 @@ function heatmap_(df::DataFrame;label="")
     dn = Matrix(df)
     d = string.(round.(dn, digits = 2))
     d[tril(trues(size(d)))] .= ""
-    fig = Figure(size = (1200, 1200), fontsize = 24)
+    fig = Figure(size = (1200, 1200))
     ax = Axis(fig[1, 1], xticks = (1:l,tl), yticks = (1:l,tl))
+    ax.xticklabelsize = Heatmaps.fontsize(s[1])
+    ax.yticklabelsize = Heatmaps.fontsize(s[1])
     hmap = heatmap!(ax, dn, colormap = :plasma)
     for i in 1:size(d,1), j in 1:size(d,2)
         txtcolor = dn[i, j] < 0.15 ? :white : :black
         text!(ax, d[i,j], position = (i, j),
-            color = txtcolor, align = (:center, :center))
+            color = txtcolor, align = (:center, :center),fontsize=Heatmaps.fontsize(s[1]))
     end
     hmap.image.value.x[tril(trues(size(hmap.image.value.x)),-1)] .=NaN
     Colorbar(fig[1, 2], hmap; label = "", width = 15, ticksize = 15)
@@ -57,13 +59,15 @@ function heatmap(df::DataFrame,m::Matrix{Float64};label="")
     ptext = Matrix{String}(undef,l,l)
     m[tril(trues(size(m)))] .=1
     st = p_to_stars.(m)
-    fig = Figure(size = (1800, 1800), fontsize = 24)
+    fig = Figure(size = (1800, 1800))
     ax = Axis(fig[1, 1], xticks = (1:l,tl), yticks = (1:l,tl))
+    ax.xticklabelsize = Heatmaps.fontsize(s[1])
+    ax.yticklabelsize = Heatmaps.fontsize(s[1])
     hmap = heatmap!(ax, dn, colormap = :plasma)
     for i in 1:size(d,1), j in 1:size(d,2)
         txtcolor = dn[i, j] < 0.15 ? :white : :black
         text!(ax, st[i,j]*"\n"*d[i,j], position = (i, j),
-            color = txtcolor, align = (:center, :center))
+            color = txtcolor, align = (:center, :center),fontsize = Heatmaps.fontsize(s[1]))
     end
     hmap.image.value.x[tril(trues(size(hmap.image.value.x)),-1)] .=NaN
 
@@ -83,3 +87,4 @@ function p_to_stars(p)
         return ""
     end
 end
+fontsize(n) = round(150/(n^0.5))
